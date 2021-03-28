@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "558da759-e5a9-42c6-a909-87b35d8d29d0",
+		"name": "create user",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//var name = 'Jonh';\r",
+							"//var job = 'lead';\r",
+							"function getRandomName() {\r",
+							"        var result       = '';\r",
+							"        var words        = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';\r",
+							"        var max_position = words.length - 1;\r",
+							"            for( i = 0; i < 10; ++i ) {\r",
+							"                position = Math.floor ( Math.random() * max_position );\r",
+							"                result = result + words.substring(position, position + 1);\r",
+							"            }\r",
+							"         return result;       \r",
+							"}\r",
+							"pm.environment.set('name', getRandomName());\r",
+							"pm.environment.set('job', getRandomName());\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"let resBody = pm.response.json();\r",
+							"pm.environment.set('value_job', resBody.job)\r",
+							"pm.environment.set('value_name', resBody.name)\r",
+							"\r",
+							"pm.test(\"Response property matches environment variable\", function () {\r",
+							"  pm.expect(pm.response.json().name, pm.response.json().job).to.eql(pm.environment.get(\"value_name\", \"value_job\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"job\": \"{{job}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
