@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "c8a54d07-512d-41ec-8899-c37704cbe6c6",
+		"name": "Shop Bugred ru",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create item",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// function getRandomNumber (min, max){",
+							"//     min = Math.floor();",
+							"//     max = Math.floor();",
+							"//     return Math.floor(Math.random() * (max - min))+ min;",
+							"// }",
+							"",
+							"// pm.environment.set('size', getRandomNumber(39, 49));",
+							"// pm.environment.set('price', getRandomNumber(100, 1399));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody = pm.response.json();",
+							"",
+							"pm.environment.set('itemid', resBody.result.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"New short\",\n  \"section\": \"Шорты\",\n  \"description\": \"New fashion\",\n  \"color\": \"Green\",\n  \"size\": {{size}},\n  \"price\": {{price}},\n  \"params\": \"Shorts\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://shop.bugred.ru/api/items/create/",
+					"protocol": "http",
+					"host": [
+						"shop",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"api",
+						"items",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody = pm.response.json();",
+							"",
+							"pm.test('Checking the status update is ok', function(){",
+							"    pm.expect(resBody.status).to.equal('ok')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\":{{itemid}},\n  \"name\": \"New short\",\n  \"section\": \"Шорты\",\n  \"description\": \"New fashion\",\n  \"color\": \"Green\",\n  \"size\": {{size}},\n  \"price\": {{price}},\n  \"params\": \"Shorts\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://shop.bugred.ru/api/items/update/?color=ORANGE",
+					"protocol": "http",
+					"host": [
+						"shop",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"api",
+						"items",
+						"update",
+						""
+					],
+					"query": [
+						{
+							"key": "color",
+							"value": "ORANGE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody = pm.response.json();",
+							"",
+							"pm.test('Checking for color changes', function(){",
+							"    pm.expect(resBody.result.color).to.not.equal('GREEN')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://shop.bugred.ru/api/items/get/?id={{itemid}}",
+					"protocol": "http",
+					"host": [
+						"shop",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"api",
+						"items",
+						"get",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{itemid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://shop.bugred.ru/api/items/delete/?id={{itemid}}",
+					"protocol": "http",
+					"host": [
+						"shop",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"api",
+						"items",
+						"delete",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{itemid}}"
+						},
+						{
+							"key": "id",
+							"value": "515",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"let resBody = pm.response.json();",
+					"",
+					"pm.test('Status code 200', function(){",
+					"    pm.response.to.have.status(200);",
+					"})"
+				]
+			}
+		}
+	]
+}
